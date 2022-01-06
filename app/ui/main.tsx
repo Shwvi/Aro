@@ -62,7 +62,8 @@ export function Main() {
       },
     ]);
     hi.play();
-  }, [weather]);
+  }, [weather.temperature, weather.text]);
+
   useEffect(() => {
     const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
     if (darkMode.matches) {
