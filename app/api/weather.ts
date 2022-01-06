@@ -2,11 +2,12 @@ import axios from "axios";
 import url from "url";
 import querystring from "query-string";
 import crypto from "crypto";
+import tokens from "../../token.json";
 import { dispatchWeather, WeatherData } from "../ui/state/weather";
 const LASTUPDATEWEATHER = "ARO_LASTUPDATEWEATHER";
 const LASTWEATHER = "ARO_LASTWEATHER";
 const locationInfo: { latitude?: number; longitude?: number; city?: string } = {
-  city: "xinyang",
+  city: tokens.city,
 };
 export function initLocationInfo() {
   return new Promise((resolve, reject) => {
@@ -41,9 +42,9 @@ weatherRequest.interceptors.response.use(
     return Promise.reject(err);
   }
 );
-const secret = "SGrcfwcRQ1puznirJ"; // 秘钥
-const publicKey = "PtleBg9oUrg2ACbrO"; // 公钥
-function signature(urlString: string, paramsObj: Object) {
+const secret = tokens.weather_token; // 秘钥
+
+function signature(urlString: string, paramsObj: { [index: string]: string }) {
   if (!urlString) {
     return;
   }
@@ -78,7 +79,7 @@ export const getCurrentWeather = () =>
     },
   });
 export async function precipMinutely() {
-  let url = `https://api.seniverse.com/v3/weather/now.json?key=${secret}&location=${locationInfo.city}&language=en`;
+  const url = `https://api.seniverse.com/v3/weather/now.json?key=${secret}&location=${locationInfo.city}&language=en`;
 
   const rsp = await axios.get(url);
 
